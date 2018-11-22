@@ -25,8 +25,8 @@ class LikeAdmin(admin.ModelAdmin) :
 class CommentAdmin(admin.ModelAdmin) :
 
     list_display = (
-    'creator',
-    'image',
-    'message',
+        'creator', 
+        'image',
+        'message',
     )
     
