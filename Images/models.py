@@ -19,6 +19,7 @@ class Image(TimeStampModel) :
     locations = models.CharField(max_length=140)
     caption = models.TextField(blank=True, null=True)
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE,null=True)
+    
 
 class Comment(TimeStampModel) :
 
@@ -26,9 +27,9 @@ class Comment(TimeStampModel) :
 
     message = models.TextField()
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
-    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, related_name='comments')
 
 class Like(TimeStampModel) :
 
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
-    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, related_name='likes')
