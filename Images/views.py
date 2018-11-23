@@ -2,8 +2,35 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import models,serializers
+from rest_framework import status
 
 
+
+class Feed(APIView) :
+
+    def get(self, request, format=None):
+        
+        user = request.user
+        following_users = user.following.all()
+
+        image_list = []
+
+        for following_user in following_users:
+
+            user_images = following_user.images.all()[:2]
+
+            for image in user_images:
+
+                image_list.append(image)
+
+        sorted_list = sorted(image_list, key=get_key, reverse=True)
+
+        serializer = serializers.ImageSerializer(sorted_list, many=True)
+
+        return Response(serializer.data)
+
+def get_key(image):
+    return image.created_at
 
 class ListAllImages(APIView):
 
@@ -15,22 +42,56 @@ class ListAllImages(APIView):
 
         return Response(data=serializer.data)
 
-class ListAllComment(APIView):
+class LikeImage(APIView):
 
-    def get(self, request, format=None):
+    def get(self,request,image_id, format=None) :
 
-        all_comment = models.Comment.objects.all()
+        user = request.user
 
-        serializer = serializers.CommentSerializer(all_comment, many=True)
+        try:
+            found_image = models.Image.objects.get(id=image_id)
+        except models.Image.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(data=serializer.data)
+        try:
+            preexisting_like = models.Like.objects.get(
+                creator=user,
+                image=found_image
+            )
+            preexisting_like.delete()
 
-class ListAllLikes(APIView):
+            return Response(status=status.HTTP_204_NO_CONTENT) #204 is no content
 
-    def get(self, request, format=None):
+        except models.Like.DoesNotExist:
 
-        all_likes = models.Like.objects.all()
+            new_like = models.Like.objects.create(
+                creator=user,
+                image=found_image
+            )
 
-        serializer = serializers.LikeSerializer(all_likes, many=True)
+            new_like.save()
 
-        return Response(data=serializer.data)
+            return Response(status=status.HTTP_201_CREATED)
+
+# class ListAllComment(APIView):
+
+#     def get(self, request, format=None):
+
+#         user_id = request.user.id
+
+#         # all_comment = models.Comment.objects.all()
+#         all_comment = models.Comment.objects.filter(creator=user_id)
+
+#         serializer = serializers.CommentSerializer(all_comment, many=True)
+
+#         return Response(data=serializer.data)
+
+# class ListAllLikes(APIView):
+
+#     def get(self, request, format=None):
+
+#         all_likes = models.Like.objects.all()
+
+#         serializer = serializers.LikeSerializer(all_likes, many=True)
+
+#         return Response(data=serializer.data)
