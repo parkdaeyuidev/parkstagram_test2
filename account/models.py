@@ -60,8 +60,8 @@ class User(AbstractBaseUser, PermissionsMixin) :
     bio = models.TextField(null=True)
     phone = models.CharField(max_length=140, null=True)
     gender = models.CharField(max_length=80, choices=GENDER_CHOICE, null=True)
-    followers = models.ManyToManyField("self")
-    following = models.ManyToManyField("self")
+    followers = models.ManyToManyField("self", blank=True)
+    following = models.ManyToManyField("self", blank=True)
     # first_name = models.CharField(
     #     verbose_name=_('first_name'),
     #     max_length=30,
