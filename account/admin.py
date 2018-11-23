@@ -15,6 +15,7 @@ class UserAdmin(BaseUserAdmin) :
     list_display = (
         'get_full_name',
         'email',
+        'name',
         'nickname',
         'is_active',
         'is_superuser',
@@ -29,14 +30,14 @@ class UserAdmin(BaseUserAdmin) :
     )
     fieldsets = (
         (None, {'fields': ('email','password')}),
-        (_('Personal info'), {'fields': ('nickname',)}),
+        (_('Personal info'), {'fields': ('nickname','name','profile_image')}),
         (_('social'),{'fields':('followers','following')}),
         (_('Permissions'),{'fields': ('is_active','is_superuser',)}),
     )
     add_fieldsets = (
         (None,{
             'classes':('wide',),
-            'fields':('email', 'nickname','password1', 'password2','profile_image')
+            'fields':('email','name','nickname','password1', 'password2','profile_image')
         }),
     )
     search_fields = ('email','nickname')

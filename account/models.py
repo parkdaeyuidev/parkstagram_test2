@@ -55,6 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin) :
         max_length=30,
         unique=True
     )
+    name = models.CharField(max_length=30,null=True)
     profile_image = models.ImageField(null=True)
     bio = models.TextField(null=True)
     phone = models.CharField(max_length=140, null=True)

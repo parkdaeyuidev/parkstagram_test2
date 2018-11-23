@@ -16,7 +16,16 @@ class UserCreationForm(forms.ModelForm):
             }
         )
     )
-
+    name = forms.CharField(
+        label=_('name'),
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder' : _('Name'),
+                'required':'True',
+            }
+        )
+    )
     nickname = forms.CharField(
         label=_('Nickname'),
         required= True,
