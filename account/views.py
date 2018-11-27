@@ -13,3 +13,16 @@ class ExploreUsers(APIView):
         serializer = serializers.UserSerializer(last_five, many=True)
         
         return Response(serializer.data)
+
+class FollowerUser(APIView):
+
+    def post(self,request,user_id, format=None):
+        
+        user = request.user
+
+        try:
+            user_to_follow = models.User.objects.get(id=user_id)
+        except models.User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        

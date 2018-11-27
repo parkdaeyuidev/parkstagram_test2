@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
 from . import views
+from . import stibee
 
 urlpatterns = [
     path('images/',views.ListAllImages.as_view(),name='all_images'),
@@ -11,4 +12,7 @@ urlpatterns = [
     path('unlike/<int:image_id>/',views.UnLikeImage.as_view(),name='unlike_image'), #좋아요취소
     path('comment/<int:image_id>/',views.CommentOnImage.as_view(),name='comment_image'), #댓글생성
     path('<int:comment_id>/comment/',views.Comment.as_view(),name='comment'),
+    # 스티비_테스트
+    path('stibee/', stibee.StibeeTestView.as_view(), name="stibee_test")
+
 ] 
