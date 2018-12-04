@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework', # REST framework
-    'Images',    
+    'taggit', # tags for the photos
+    'Images', 
+    'notifications',   
 ]
 
 MIDDLEWARE = [
@@ -127,3 +129,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'account.User'
+
+TAGGIT_CASE_INSENSITIVE = True #tag의 대소문자 구분하지 않겠다

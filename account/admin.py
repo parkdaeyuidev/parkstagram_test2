@@ -30,7 +30,7 @@ class UserAdmin(BaseUserAdmin) :
     )
     fieldsets = (
         (None, {'fields': ('email','password')}),
-        (_('Personal info'), {'fields': ('nickname','name','profile_image')}),
+        (_('Personal info'), {'fields': ('nickname','name','profile_image','website','bio')}),
         (_('social'),{'fields':('followers','following')}),
         (_('Permissions'),{'fields': ('is_active','is_superuser',)}),
     )

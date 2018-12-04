@@ -3,6 +3,9 @@ from django.contrib.auth.models import (BaseUserManager,AbstractBaseUser,Permiss
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+
+
+
 class UserManager(BaseUserManager) :
     def create_user(self, email, nickname, password=None):
         """
@@ -58,10 +61,12 @@ class User(AbstractBaseUser, PermissionsMixin) :
     name = models.CharField(max_length=30,null=True)
     profile_image = models.ImageField(null=True)
     bio = models.TextField(null=True)
+    website = models.CharField(max_length=200,null=True)
     phone = models.CharField(max_length=140, null=True)
     gender = models.CharField(max_length=80, choices=GENDER_CHOICE, null=True)
-    followers = models.ManyToManyField("self", blank=True)
-    following = models.ManyToManyField("self", blank=True)
+    followers = models.ManyToManyField("self", blank=True, related_name='followers')
+    following = models.ManyToManyField("self", blank=True, related_name='following')
+    
     # first_name = models.CharField(
     #     verbose_name=_('first_name'),
     #     max_length=30,
@@ -92,6 +97,22 @@ class User(AbstractBaseUser, PermissionsMixin) :
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nickname',]
 
+    @property
+    def post_count(self):
+        return self.images.all().count()
+
+    @property
+    def followers_count(self):
+        return self.followers.all().count()
+
+    @property
+    def following_count(self):
+        return self.following.all().count()
+
+    # @property
+    # def followings_count(self):
+    #     return self.following.all().count()
+
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
@@ -113,6 +134,8 @@ class User(AbstractBaseUser, PermissionsMixin) :
     def is_staff(self) :
         "Is the user a member of staff?"
         return self.is_superuser
+
+    
         
     get_full_name.short_description = _('Full name')
 
