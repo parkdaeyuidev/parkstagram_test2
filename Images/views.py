@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import models,serializers
 from rest_framework import status
-
+from notifications import views as notifications_views
 
 #내 아이디에 팔로되어있는 유저들의 이미지를 출력
 class Feed(APIView) :
@@ -72,6 +72,8 @@ class LikeImage(APIView):
 
             new_like.save()
 
+            notifications_views.create_notification(user,found_image.creator, 'Like', found_image)
+
             return Response(status=status.HTTP_201_CREATED)
 
 class UnLikeImage(APIView):
@@ -116,7 +118,8 @@ class CommentOnImage(APIView) :
         if serializer.is_valid() :
 
             serializer.save(creator=user, image=found_image)
-
+            notifications_views.create_notification(user,found_image.creator,'comment',found_image,request.data['message'])
+        
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
         else:

@@ -16,3 +16,9 @@ class Notification(image_models.TimeStampModel) :
     notification_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     image = models.ForeignKey(image_models.Image, on_delete=models.CASCADE, null=True,blank=True)
     comment = models.TextField(blank=True,null=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return 'From:{} - To:{}'.format(self.creator, self.to)
